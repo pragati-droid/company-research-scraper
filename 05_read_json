@@ -1,0 +1,61 @@
+package main
+
+import (
+	"encoding/json"
+	"fmt"
+	"os"
+)
+
+type FinancialYear struct {
+	FiscalYear                        string  `json:"fiscal_year"`
+	Revenue                           int64   `json:"revenue_from_operations"`
+	CostOfSales                       int64   `json:"cost_of_sales"`
+	GrossProfit                       int64   `json:"gross_profit"`
+	OtherIncome                       int64   `json:"other_income"`
+	AdministrativeSellingDistribution int64   `json:"administrative_selling_distribution_expenses"`
+	Depreciation                      int64   `json:"depreciation_and_amortization"`
+	ProfitFromOperations              int64   `json:"profit_from_operations"`
+	FinanceCosts                      int64   `json:"finance_costs"`
+	ProfitBeforeTax                   int64   `json:"profit_before_tax"`
+	IncomeTax                         int64   `json:"income_tax"`
+	DeferredTax                       int64   `json:"deferred_tax"`
+	NetProfitOrLoss                   int64   `json:"net_profit_or_loss"`
+	EarningsPerShare                  float64 `json:"earnings_per_share"`
+}
+
+type CompanyData struct {
+	Company    string          `json:"company"`
+	Currency   string          `json:"currency"`
+	Unit       string          `json:"unit"`
+	Financials []FinancialYear `json:"financials"`
+}
+
+func main() {
+	file, err := os.ReadFile("../ghorahi_financials.json")
+	if err != nil {
+		fmt.Println("Error reading JSON:", err)
+		return
+	}
+
+	var data CompanyData
+
+	err = json.Unmarshal(file, &data)
+	if err != nil {
+		fmt.Println("Error decoding JSON:", err)
+		return
+	}
+
+	fmt.Println("Company:", data.Company)
+	fmt.Println("Currency:", data.Currency)
+	fmt.Println("------------------------------")
+
+	for _, year := range data.Financials {
+		fmt.Println("Fiscal Year:", year.FiscalYear)
+		fmt.Printf("Revenue: NPR %d\n", year.Revenue)
+		fmt.Printf("Gross Profit: NPR %d\n", year.GrossProfit)
+		fmt.Printf("Profit from Operations: NPR %d\n", year.ProfitFromOperations)
+		fmt.Printf("Net Profit/Loss: NPR %d\n", year.NetProfitOrLoss)
+		fmt.Printf("EPS: NPR %.2f\n", year.EarningsPerShare)
+		fmt.Println("------------------------------")
+	}
+}

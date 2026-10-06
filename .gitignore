@@ -1,0 +1,27 @@
+# Go
+*.exe
+
+# Environment / secrets
+.env
+
+# PostgreSQL
+*.db
+
+# Large scraped files
+*.pdf
+*.png
+
+# OCR / extracted files
+*.txt
+
+# Generated data files
+*.json
+*.csv
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
